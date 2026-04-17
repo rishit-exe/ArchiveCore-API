@@ -1,6 +1,21 @@
-const express = require('express');
+const dotenv = require("dotenv");
+const express = require('express'); 
+var morgan = require('morgan')
+
+dotenv.config();
+
 const app = express();
-const port = 3000;
+const port = process.env.NODE_PORT;
+const url = process.env.ARCHIVECORE_URL;
+
+app.use(express.json());
+
+if (process.env.NODE_ENV === 'production') {
+    app.use(morgan('combined'));
+} else {
+    app.use(morgan('dev'));
+}
+
 
 // Basic route
 app.get('/', (req, res) => {
@@ -8,5 +23,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+  console.log(`Server running at ${url}`);
 });
